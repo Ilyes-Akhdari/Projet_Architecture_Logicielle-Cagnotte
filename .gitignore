@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+build/
+dist/
+
+# Application Archilog
+*.db
+*.log
+
+# Windows
+Thumbs.db
+desktop.ini

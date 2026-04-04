@@ -1,0 +1,27 @@
+[project]
+name = "archilog"
+version = "0.2"
+description = "A simple project for educational purpose."
+readme = "README.md"
+dependencies = [
+    "click>=8.3.1",
+    "flask>=3.0.0",
+    "flask-httpauth>=4.8.0",
+    "flask-wtf>=1.2.2",
+    "pydantic>=2.12.5",
+    "spectree>=2.0.1",
+    "sqlalchemy>=2.0.0",
+]
+requires-python = ">=3.11"
+
+[project.scripts]
+archilog = "archilog.views:cli"
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

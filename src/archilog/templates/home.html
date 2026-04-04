@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Cagnottes{% endblock %}
+
+{% block content %}
+<h1 style="display:flex; align-items:center; gap:10px;">
+    <svg class="icon" style="width:32px; height:32px; color:var(--primary-color);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    Mes Cagnottes
+</h1>
+
+<ul class="expense-list" style="margin-top:2rem;">
+    {% for pot in pots %}
+        <li>
+            <a href="{{ url_for('web_ui.pot_details', name=pot.name) }}" style="font-size: 1.2rem; display:flex; align-items:center; gap:8px;">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                {{ pot.name }}
+            </a>
+        </li>
+    {% else %}
+        <li style="justify-content:center;"><p style="color:var(--text-muted)">Aucune cagnotte pour le moment.</p></li>
+    {% endfor %}
+</ul>
+
+{% if is_admin %}
+<h2>Nouvelle cagnotte / dépense</h2>
+<form method="POST" action="{{ url_for('web_ui.create_pot') }}">
+    {{ form.hidden_tag() }}
+    
+    <div class="input-group">
+        {{ form.pot_name(placeholder="Nom de la cagnotte") }}
+        {% for error in form.pot_name.errors %}<span class="error-text">{{ error }}</span>{% endfor %}
+    </div>
+    
+    <div class="input-group">
+        {{ form.paid_by(placeholder="Payé par") }}
+        {% for error in form.paid_by.errors %}<span class="error-text">{{ error }}</span>{% endfor %}
+    </div>
+    
+    <div class="input-group">
+        {{ form.amount(placeholder="Montant", step="0.01") }}
+        {% for error in form.amount.errors %}<span class="error-text">{{ error }}</span>{% endfor %}
+    </div>
+    
+    <div class="input-group" style="flex: 0 1 auto;">
+        <button type="submit">Ajouter</button>
+    </div>
+</form>
+{% endif %}
+{% endblock %}

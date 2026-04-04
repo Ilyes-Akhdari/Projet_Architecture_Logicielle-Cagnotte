@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Cagnotte {{ name }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('web_ui.home') }}" style="display:flex; align-items:center; gap:5px;">
+    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+    Retour
+</a>
+
+<div class="pot-header">
+    <h1>{{ name }}</h1>
+    
+    {% if is_admin %}
+    <form action="{{ url_for('web_ui.delete_pot_route', name=name) }}" method="POST" style="margin:0;">
+        <button type="submit" class="btn-danger" title="Supprimer définitivement la cagnotte">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            Supprimer la cagnotte
+        </button>
+    </form>
+    {% endif %}
+</div>
+
+{% if mp and mp.expenses %}
+    <h2>Dépenses</h2>
+    <ul class="expense-list">
+        {% for e in mp.expenses %}
+            <li>
+                <span><strong>{{ e.paid_by }}</strong> a payé <strong>{{ e.amount }}€</strong> <small style="color: var(--text-muted); margin-left:8px;">({{ e.datetime.strftime('%d/%m/%Y à %H:%M') }})</small></span>
+                <form action="{{ url_for('web_ui.delete_expense_route', name=name) }}" method="POST" style="margin:0; padding:0; width:auto;">
+                    <input type="hidden" name="paid_by" value="{{ e.paid_by }}">
+                    <button type="submit" class="btn-icon" title="Supprimer cette dépense">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Équilibre Financier</h2>
+    {% if transactions %}
+        <div class="transactions-container">
+            {% for t in transactions %}
+                <div class="transaction-card">
+                    <div class="person debtor">
+                        <div class="icon-circle send">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg>
+                        </div>
+                        {{ t.sender }}
+                    </div>
+                    <div class="transfer-amount">{{ t.amount }}€</div>
+                    <div class="person creditor">
+                        <div class="icon-circle receive">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7"></path></svg>
+                        </div>
+                        {{ t.receiver }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="transaction-card" style="justify-content: center; color: var(--success); font-weight: bold;">
+            <svg class="icon" style="margin-right: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Les comptes sont parfaitement à l'équilibre.
+        </div>
+    {% endif %}
+{% else %}
+    <p style="color: var(--text-muted); text-align: center; margin-top: 2rem; margin-bottom: 2rem;">Cette cagnotte est vide.</p>
+{% endif %}
+
+<h2>Ajouter une dépense</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    
+    <div class="input-group">
+        {{ form.paid_by(placeholder="Payé par (ex: Ilyes)") }}
+        {% for error in form.paid_by.errors %}<span class="error-text">{{ error }}</span>{% endfor %}
+    </div>
+    
+    <div class="input-group">
+        {{ form.amount(placeholder="Montant", step="0.01") }}
+        {% for error in form.amount.errors %}<span class="error-text">{{ error }}</span>{% endfor %}
+    </div>
+    
+    <div class="input-group" style="flex: 0 1 auto;">
+        <button type="submit">Ajouter</button>
+    </div>
+</form>
+{% endblock %}

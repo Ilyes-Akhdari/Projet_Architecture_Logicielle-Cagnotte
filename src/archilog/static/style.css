@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-color: #0f172a;        
+    --card-bg: #1e293b;         
+    --text-main: #f8fafc;       
+    --text-muted: #94a3b8;      
+    --primary-color: #6366f1;   
+    --primary-hover: #4f46e5;
+    --border-color: #334155;
+    --danger: #f43f5e;          
+    --success: #10b981;         
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    /* Utilisation de la police Poppins */
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-color);
+}
+
+h1, h2 { color: var(--text-main); font-weight: 600; }
+h1 { font-size: 2.2rem; margin: 0; }
+h2 { margin-top: 2rem; margin-bottom: 1rem; font-size: 1.4rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
+
+a { color: var(--primary-color); text-decoration: none; transition: color 0.2s; font-weight: 500;}
+a:hover { color: #818cf8; }
+
+/* Entête cagnotte (Titre + Bouton Supprimer) */
+.pot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Liste de dépenses */
+ul.expense-list { list-style: none; margin-bottom: 1.5rem; }
+ul.expense-list li {
+    padding: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+ul.expense-list li:hover { background-color: rgba(255, 255, 255, 0.02); }
+ul.expense-list li:last-child { border-bottom: none; }
+
+strong { color: var(--primary-color); font-weight: 600; }
+
+/* Formulaires */
+form { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1rem; }
+input[type="text"], input[type="number"] {
+    flex: 1; min-width: 150px; padding: 0.8rem 1rem;
+    background-color: #0f172a; border: 1px solid var(--border-color);
+    color: white; border-radius: 10px; font-size: 1rem; font-family: 'Poppins', sans-serif;
+}
+input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3); }
+
+button {
+    background-color: var(--primary-color); color: white;
+    border: none; padding: 0.8rem 1.5rem; border-radius: 10px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Poppins', sans-serif;
+}
+button:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+
+/* Bouton spécial Danger (Supprimer la cagnotte) */
+button.btn-danger {
+    background-color: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    display: flex; align-items: center; gap: 8px;
+}
+button.btn-danger:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Bouton Poubelle sans fond */
+button.btn-icon { background: transparent; color: var(--text-muted); padding: 0.5rem; border-radius: 8px; }
+button.btn-icon:hover { background: rgba(244, 63, 94, 0.1); color: var(--danger); transform: scale(1.1); }
+
+/* Messages Flash */
+.flashes { list-style: none; margin-bottom: 1.5rem; }
+.flashes li { padding: 1rem; border-radius: 10px; font-weight: 500; text-align: center; margin-bottom: 0.5rem; }
+.flashes li.success { background-color: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); }
+.flashes li.error { background-color: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+
+/* Transactions (Design Flèches Envoi/Réception) */
+.transaction-card {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color);
+    padding: 1.2rem 1.5rem; border-radius: 14px; margin-bottom: 0.8rem;
+    transition: transform 0.2s;
+}
+.transaction-card:hover { transform: translateY(-2px); border-color: var(--primary-color); }
+
+.person { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 1.1rem; }
+.debtor { color: var(--text-main); }
+.creditor { color: var(--text-main); }
+
+/* Petites icônes circulaires pour les flèches */
+.icon-circle {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+}
+.icon-circle.send { background: rgba(244, 63, 94, 0.15); color: var(--danger); }
+.icon-circle.receive { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+
+.transfer-amount {
+    background: var(--bg-color); padding: 0.5rem 1.2rem; border-radius: 20px;
+    color: var(--primary-color); font-weight: 600; border: 1px solid var(--border-color);
+    display: flex; align-items: center; gap: 8px;
+}
+.icon { width: 18px; height: 18px; }
+
+/* --- Corrections pour les formulaires WTForms --- */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start; /* Empêche les champs de s'étirer bizarrement */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Permet aux champs de prendre l'espace disponible équitablement */
+    min-width: 150px; /* Évite que les champs soient trop écrasés sur mobile */
+}
+
+.input-group input {
+    width: 100%;
+}
+
+.error-text {
+    color: #ff4a4a;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* --- Corrections pour les formulaires WTForms --- */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+}
+
+.input-group input {
+    width: 100%;
+}
+
+.error-text {
+    color: #ff4a4a;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
