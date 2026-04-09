@@ -1,18 +1,12 @@
-import click
 import logging
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from sqlalchemy.exc import IntegrityError
-from archilog.data import get_all_money_pots, create_expense, delete_expense, delete_money_pot, init_database
+from archilog.data import get_all_money_pots, create_expense, delete_expense, delete_money_pot
 from archilog.domain import get_money_pot_details
 from archilog.forms import CreatePotForm, AddExpenseForm
-from archilog.auth import auth # NOUVEAU
+from archilog.auth import auth
 
 web_ui = Blueprint("web_ui", __name__)
-
-@click.command("init-db")
-def init_db_command():
-    init_database()
-    click.echo("Base de données initialisée avec succès.")
 
 @web_ui.route("/", methods=["GET"])
 @auth.login_required # Il faut être connecté pour voir l'accueil
