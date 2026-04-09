@@ -2,23 +2,53 @@ from archilog.domain import compute_transactions, Transaction
 from archilog.data import MoneyPot, Expense
 from datetime import datetime
 
-def test_compute_transactions_equilibre_simple():
-    # 1. PRÉPARATION (Arrange)
-    expenses = [
-        Expense(money_pot="Test", paid_by="Alice", amount=10.0, datetime=datetime.now()),
-        Expense(money_pot="Test", paid_by="Bob", amount=20.0, datetime=datetime.now()),
-        Expense(money_pot="Test", paid_by="Charlie", amount=30.0, datetime=datetime.now()),
-    ]
-    pot = MoneyPot(name="Test", expenses=expenses)
-    
-    # La moyenne est de 20€. 
-    # Alice a payé 10 (doit 10). Bob a payé 20 (équilibré). Charlie a payé 30 (récupère 10).
 
-    # 2. ACTION (Act)
+def make_pot(name, *expenses):
+    """Helper : crée un MoneyPot à partir de tuples (paid_by, amount)."""
+    return MoneyPot(
+        name=name,
+        expenses=[
+            Expense(money_pot=name, paid_by=p, amount=a, datetime=datetime.now())
+            for p, a in expenses
+        ]
+    )
+
+
+# --- CAS 1 : équilibre simple (3 personnes) ---
+def test_compute_transactions_equilibre_simple():
+    # Moyenne = 20€. Alice doit 10 à Charlie.
+    pot = make_pot("Test", ("Alice", 10.0), ("Bob", 20.0), ("Charlie", 30.0))
     transactions = compute_transactions(pot)
 
-    # 3. VÉRIFICATION (Assert)
-    assert len(transactions) == 1, "Il ne devrait y avoir qu'une seule transaction"
-    assert transactions[0].sender == "Alice", "Alice doit rembourser"
-    assert transactions[0].receiver == "Charlie", "Charlie doit recevoir"
-    assert transactions[0].amount == 10.0, "Le montant doit être de 10€"
+    assert len(transactions) == 1
+    assert transactions[0].sender == "Alice"
+    assert transactions[0].receiver == "Charlie"
+    assert transactions[0].amount == 10.0
+
+
+# --- CAS 2 : cagnotte vide → aucune transaction ---
+def test_compute_transactions_cagnotte_vide():
+    pot = MoneyPot(name="Vide", expenses=[])
+    transactions = compute_transactions(pot)
+
+    assert transactions == []
+
+
+# --- CAS 3 : tout le monde a payé pareil → quitte ---
+def test_compute_transactions_tout_quitte():
+    pot = make_pot("Quitte", ("Alice", 15.0), ("Bob", 15.0), ("Charlie", 15.0))
+    transactions = compute_transactions(pot)
+
+    assert transactions == []
+
+
+# --- CAS 4 : deux personnes, l'une doit à l'autre ---
+def test_compute_transactions_deux_personnes():
+    # Moyenne = 25€. Alice a payé 10 (doit 15). Bob a payé 40 (récupère 15).
+    pot = make_pot("Duo", ("Alice", 10.0), ("Bob", 40.0))
+    transactions = compute_transactions(pot)
+
+    assert len(transactions) == 1
+    assert transactions[0].sender == "Alice"
+    assert transactions[0].receiver == "Bob"
+    assert transactions[0].amount == 15.0
