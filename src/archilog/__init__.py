@@ -1,7 +1,6 @@
 import logging
 from flask import Flask, flash, redirect, url_for, request, jsonify
 
-
 def create_app():
     app = Flask(__name__)
     app.secret_key = "cle_secrete_pour_le_projet_archilog"
@@ -15,7 +14,6 @@ def create_app():
         ]
     )
 
-    # --- GESTIONNAIRE D'ERREURS DYNAMIQUE ---
     @app.errorhandler(500)
     def handle_internal_error(error):
         logging.exception(error)
@@ -33,19 +31,17 @@ def create_app():
             is_admin=(auth.current_user() == 'admin') if auth.current_user() else False
         )
 
-    # --- ENREGISTREMENT DES BLUEPRINTS ---
-    from archilog.web import web_ui
-    from archilog.api import api, api_spec
+    # --- IMPORTS DEPUIS LE SOUS-DOSSIER VIEWS ---
+    from archilog.views.web import web_ui
+    from archilog.views.api import api, api_spec
+    from archilog.views.cli import cli as click_cli
 
     app.register_blueprint(web_ui, url_prefix="/")
     app.register_blueprint(api, url_prefix="/api")
 
-    # Indispensable pour générer la page Swagger
     api_spec.register(app)
 
-    # --- ENREGISTREMENT DES COMMANDES CLI ---
-    # On ajoute chaque sous-commande du groupe Click au CLI Flask
-    from archilog.cli import cli as click_cli
+    # Enregistrement des commandes CLI
     for name, cmd in click_cli.commands.items():
         app.cli.add_command(cmd, name=name)
 
