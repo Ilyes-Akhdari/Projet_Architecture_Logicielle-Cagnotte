@@ -2,17 +2,17 @@
 
 Application de gestion de cagnottes permettant le partage de dépenses et le calcul automatique de l'équilibre financier ("qui doit à qui").
 
-Ce projet a été réalisé dans le cadre du module d'Architecture Logicielle (BUT2 INFO S4). Il met en œuvre une architecture **N-Tier** stricte, comprenant une interface CLI, une interface Web native et une API HTTP complète.
+Ce projet a été réalisé dans le cadre du module d'Architecture Logicielle (BUT2 INFO S4). [cite_start]Il met en œuvre une architecture **N-Tier** stricte, comprenant une interface CLI, une interface Web native et une API HTTP complète [cite: 27-29].
 
 ---
 
 ## ✨ Fonctionnalités Principales
 
-* **Interface CLI :** Gestion complète des cagnottes et dépenses en ligne de commande via Click.
-* **Équilibre financier automatique :** Calcul intelligent des transactions pour rembourser les participants de manière optimale.
-* **Interface Web Native :** Navigation fluide propulsée par des templates Jinja2 (HTML/CSS, sans JavaScript).
-* **API HTTP (REST) :** Interface machine-to-machine avec documentation interactive (Swagger) couvrant 100% des opérations (CRUD).
-* **Sécurité & Rôles :** Distinction des privilèges (Admin/User). L'Admin a un accès total, l'User peut uniquement consulter et ajouter des dépenses.
+* [cite_start]**Interface CLI :** Gestion complète des cagnottes et dépenses en ligne de commande via Click [cite: 142-145].
+* [cite_start]**Équilibre financier automatique :** Calcul intelligent des transactions pour rembourser les participants de manière optimale[cite: 58].
+* [cite_start]**Interface Web Native :** Navigation fluide propulsée par des templates Jinja2 (HTML/CSS, sans JavaScript) [cite: 272-273].
+* [cite_start]**API HTTP (REST) :** Interface machine-to-machine avec documentation interactive (Swagger) couvrant 100% des opérations (CRUD) [cite: 582-585].
+* **Sécurité & Rôles :** Distinction des privilèges (Admin/User). [cite_start]L'Admin a un accès total, l'User peut uniquement consulter et ajouter des dépenses [cite: 486-488].
 
 ---
 
@@ -20,13 +20,13 @@ Ce projet a été réalisé dans le cadre du module d'Architecture Logicielle (B
 
 Le projet respecte les standards professionnels de développement web :
 
-1. **Architecture N-Tier & Blueprints :** Séparation stricte entre la Vue (`web.py` / `api.py` / `cli.py`), le Domaine (`domain.py`) et la Data (`data.py`). L'application utilise une `Application Factory` et des routeurs indépendants.
-2. **Configuration Centralisée :** Les variables d'environnement (`dev.env`) pilotent la configuration via `config.py`.
-3. **Persistance (SQLAlchemy Core) :** Utilisation exclusive de SQLAlchemy Core sans ORM. Contraintes d'intégrité métier assurées par clé primaire composite (une seule dépense par participant pour une même cagnotte).
-4. **Sécurité Web (WTForms) :** Sécurisation des formulaires Web avec validation syntaxique, sémantique et protection CSRF.
-5. **Sécurité API (Pydantic & SpecTree) :** Validation stricte des flux JSON entrants et génération automatique de la documentation OpenAPI.
-6. **Authentification Hybride :** Le site Web utilise `BasicAuth` (login/mot de passe), l'API est sécurisée par `TokenAuth` (Bearer Token).
-7. **Traçabilité :** Fichier de logs (`archilog.log`) et `errorhandler(500)` intelligent (JSON pour l'API, redirection Flash pour le Web).
+1. **Architecture N-Tier & Blueprints :** Séparation stricte entre la Vue (module **`views/`** regroupant `web.py`, `api.py` et `cli.py`), le Domaine (`domain.py`) et la Data (`data.py`). [cite_start]L'application utilise une `Application Factory` et des routeurs indépendants [cite: 275-294, 590-605].
+2. [cite_start]**Configuration Centralisée :** Les variables d'environnement (`dev.env`) pilotent la configuration via `config.py` [cite: 340-345].
+3. **Persistance (SQLAlchemy Core) :** Utilisation exclusive de SQLAlchemy Core sans ORM. [cite_start]Contraintes d'intégrité métier assurées par clé primaire composite (une seule dépense par participant pour une même cagnotte) [cite: 202-204].
+4. [cite_start]**Sécurité Web (WTForms) :** Sécurisation des formulaires Web avec validation syntaxique, sémantique et protection CSRF [cite: 414-416].
+5. [cite_start]**Sécurité API (Pydantic & SpecTree) :** Validation stricte des flux JSON entrants et génération automatique de la documentation OpenAPI[cite: 587].
+6. [cite_start]**Authentification Hybride :** Le site Web utilise `BasicAuth` (login/mot de passe), l'API est sécurisée par `TokenAuth` (Bearer Token)[cite: 588].
+7. [cite_start]**Traçabilité :** Fichier de logs (`archilog.log`) et `errorhandler(500)` intelligent (JSON pour l'API, redirection Flash pour le Web) [cite: 415-416, 588].
 
 ---
 
@@ -44,7 +44,7 @@ Toutes les commandes s'exécutent avec le préfixe `uv run --env-file dev.env ar
 | `list-pots` | Liste toutes les cagnottes |
 | `show-pot <nom>` | Affiche les dépenses et le bilan "qui doit à qui" |
 
-Exemple :
+Exemple d'utilisation :
 ```bash
 uv run --env-file dev.env archilog create-pot "Vacances" "Alice" 50.0
 uv run --env-file dev.env archilog add-expense "Vacances" "Bob" 30.0
@@ -55,7 +55,7 @@ uv run --env-file dev.env archilog show-pot "Vacances"
 
 ## 🔌 Documentation de l'API HTTP
 
-L'API suit les standards REST. Les créations (POST) utilisent le corps de la requête (JSON), tandis que les lectures/suppressions (GET/DELETE) ciblent directement l'URI.
+L'API suit les standards REST. [cite_start]Les créations (POST) utilisent le corps de la requête (JSON), tandis que les lectures/suppressions (GET/DELETE) ciblent directement l'URI [cite: 517-518].
 
 Voici un aperçu des routes disponibles (nécessitent un Bearer Token) :
 
@@ -63,7 +63,7 @@ Voici un aperçu des routes disponibles (nécessitent un Bearer Token) :
 * `GET /api/pots/{name}` : Affiche les détails, les dépenses et le calcul de l'équilibre financier d'une cagnotte.
 * `POST /api/pots` : Crée une nouvelle cagnotte *(Admin uniquement)*.
 * `POST /api/pots/{name}/expenses` : Ajoute une dépense.
-  * *Exemple de Request Body (JSON) :*
+  * *Exemple de Request Body (JSON) attendu :*
     ```json
     {
       "paid_by": "Ilyes",
@@ -73,11 +73,13 @@ Voici un aperçu des routes disponibles (nécessitent un Bearer Token) :
 * `DELETE /api/pots/{name}` : Supprime une cagnotte *(Admin uniquement)*.
 * `DELETE /api/pots/{name}/expenses/{paid_by}` : Supprime la dépense d'un participant.
 
-*(Une documentation Swagger interactive est générée automatiquement à `/api/apidoc/swagger` une fois le serveur lancé).*
+[cite_start]*(Note : Une documentation Swagger interactive est générée automatiquement à l'adresse `/api/apidoc/swagger` une fois le serveur lancé).* [cite: 563-566]
 
 ---
 
 ## 🔐 Identifiants de test
+
+L'application intègre des identifiants en mémoire pour tester les rôles.
 
 **Accès au Site Web (HTTP Basic Auth) :**
 * Admin : `admin` / `admin123`
@@ -91,7 +93,7 @@ Voici un aperçu des routes disponibles (nécessitent un Bearer Token) :
 
 ## 🚀 Lancement du projet
 
-**Prérequis :** Python 3.11+ et le gestionnaire de paquets `uv` installés.
+[cite_start]**Prérequis :** Python 3.11+ et le gestionnaire de paquets `uv` installés [cite: 81-82].
 
 ### 1. Configuration
 Vérifiez que le fichier `dev.env` est bien présent à la racine du projet :
@@ -100,9 +102,9 @@ ARCHILOG_DATABASE_URL=sqlite:///data.db
 ARCHILOG_DEBUG=True
 ```
 
-### 2. Commandes d'exécution
+### 2. Commandes d'exécution (Bash / PowerShell)
 ```bash
-# 1. Synchroniser les dépendances
+# 1. Télécharger et synchroniser les dépendances
 uv sync
 
 # 2. Initialiser la base de données
@@ -111,6 +113,6 @@ uv run --env-file dev.env archilog init-db
 # 3. Lancer le serveur Web et l'API
 uv run --env-file dev.env flask --app archilog --debug run
 
-# 4. Lancer les tests unitaires
+# 4. Lancer les tests unitaires de la logique métier
 uv run pytest
 ```
