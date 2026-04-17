@@ -2,17 +2,17 @@
 
 Application de gestion de cagnottes permettant le partage de dépenses et le calcul automatique de l'équilibre financier ("qui doit à qui").
 
-Ce projet a été réalisé dans le cadre du module d'Architecture Logicielle (BUT2 INFO S4). [cite_start]Il met en œuvre une architecture **N-Tier** stricte, comprenant une interface CLI, une interface Web native et une API HTTP complète [cite: 27-29].
+Ce projet a été réalisé dans le cadre du module d'Architecture Logicielle (BUT2 INFO S4). Il met en œuvre une architecture **N-Tier** stricte, comprenant une interface CLI, une interface Web native et une API HTTP complète.
 
 ---
 
 ## ✨ Fonctionnalités Principales
 
-* [cite_start]**Interface CLI :** Gestion complète des cagnottes et dépenses en ligne de commande via Click [cite: 142-145].
-* [cite_start]**Équilibre financier automatique :** Calcul intelligent des transactions pour rembourser les participants de manière optimale[cite: 58].
-* [cite_start]**Interface Web Native :** Navigation fluide propulsée par des templates Jinja2 (HTML/CSS, sans JavaScript) [cite: 272-273].
-* [cite_start]**API HTTP (REST) :** Interface machine-to-machine avec documentation interactive (Swagger) couvrant 100% des opérations (CRUD) [cite: 582-585].
-* **Sécurité & Rôles :** Distinction des privilèges (Admin/User). [cite_start]L'Admin a un accès total, l'User peut uniquement consulter et ajouter des dépenses [cite: 486-488].
+* **Interface CLI :** Gestion complète des cagnottes et dépenses en ligne de commande via Click.
+* **Équilibre financier automatique :** Calcul intelligent des transactions pour rembourser les participants de manière optimale.
+* **Interface Web Native :** Navigation fluide propulsée par des templates Jinja2 (HTML/CSS, sans JavaScript).
+* **API HTTP (REST) :** Interface machine-to-machine avec documentation interactive (Swagger) couvrant 100% des opérations (CRUD).
+* **Sécurité & Rôles :** Distinction des privilèges (Admin/User). L'Admin a un accès total, l'User peut uniquement consulter et ajouter des dépenses.
 
 ---
 
@@ -20,13 +20,13 @@ Ce projet a été réalisé dans le cadre du module d'Architecture Logicielle (B
 
 Le projet respecte les standards professionnels de développement web :
 
-1. **Architecture N-Tier & Blueprints :** Séparation stricte entre la Vue (module **`views/`** regroupant `web.py`, `api.py` et `cli.py`), le Domaine (`domain.py`) et la Data (`data.py`). [cite_start]L'application utilise une `Application Factory` et des routeurs indépendants [cite: 275-294, 590-605].
-2. [cite_start]**Configuration Centralisée :** Les variables d'environnement (`dev.env`) pilotent la configuration via `config.py` [cite: 340-345].
-3. **Persistance (SQLAlchemy Core) :** Utilisation exclusive de SQLAlchemy Core sans ORM. [cite_start]Contraintes d'intégrité métier assurées par clé primaire composite (une seule dépense par participant pour une même cagnotte) [cite: 202-204].
-4. [cite_start]**Sécurité Web (WTForms) :** Sécurisation des formulaires Web avec validation syntaxique, sémantique et protection CSRF [cite: 414-416].
-5. [cite_start]**Sécurité API (Pydantic & SpecTree) :** Validation stricte des flux JSON entrants et génération automatique de la documentation OpenAPI[cite: 587].
-6. [cite_start]**Authentification Hybride :** Le site Web utilise `BasicAuth` (login/mot de passe), l'API est sécurisée par `TokenAuth` (Bearer Token)[cite: 588].
-7. [cite_start]**Traçabilité :** Fichier de logs (`archilog.log`) et `errorhandler(500)` intelligent (JSON pour l'API, redirection Flash pour le Web) [cite: 415-416, 588].
+1. **Architecture N-Tier & Blueprints :** Séparation stricte entre la Vue (module **`views/`** regroupant `web.py`, `api.py` et `cli.py`), le Domaine (`domain.py`) et la Data (`data.py`). L'application utilise une `Application Factory` et des routeurs indépendants.
+2. **Configuration Centralisée :** Les variables d'environnement (`dev.env`) pilotent la configuration via `config.py`.
+3. **Persistance (SQLAlchemy Core) :** Utilisation exclusive de SQLAlchemy Core sans ORM. Contraintes d'intégrité métier assurées par clé primaire composite (une seule dépense par participant pour une même cagnotte).
+4. **Sécurité Web (WTForms) :** Sécurisation des formulaires Web avec validation syntaxique, sémantique et protection CSRF.
+5. **Sécurité API (Pydantic & SpecTree) :** Validation stricte des flux JSON entrants et génération automatique de la documentation OpenAPI.
+6. **Authentification Hybride :** Le site Web utilise `BasicAuth` (login/mot de passe), l'API est sécurisée par `TokenAuth` (Bearer Token).
+7. **Traçabilité :** Fichier de logs (`archilog.log`) et `errorhandler(500)` intelligent (JSON pour l'API, redirection Flash pour le Web).
 
 ---
 
@@ -55,7 +55,7 @@ uv run --env-file dev.env archilog show-pot "Vacances"
 
 ## 🔌 Documentation de l'API HTTP
 
-L'API suit les standards REST. [cite_start]Les créations (POST) utilisent le corps de la requête (JSON), tandis que les lectures/suppressions (GET/DELETE) ciblent directement l'URI [cite: 517-518].
+L'API suit les standards REST. Les créations (POST) utilisent le corps de la requête (JSON), tandis que les lectures/suppressions (GET/DELETE) ciblent directement l'URI.
 
 Voici un aperçu des routes disponibles (nécessitent un Bearer Token) :
 
@@ -73,7 +73,7 @@ Voici un aperçu des routes disponibles (nécessitent un Bearer Token) :
 * `DELETE /api/pots/{name}` : Supprime une cagnotte *(Admin uniquement)*.
 * `DELETE /api/pots/{name}/expenses/{paid_by}` : Supprime la dépense d'un participant.
 
-[cite_start]*(Note : Une documentation Swagger interactive est générée automatiquement à l'adresse `/api/apidoc/swagger` une fois le serveur lancé).* [cite: 563-566]
+*(Note : Une documentation Swagger interactive est générée automatiquement à l'adresse `/api/apidoc/swagger` une fois le serveur lancé).*
 
 ---
 
@@ -93,7 +93,7 @@ L'application intègre des identifiants en mémoire pour tester les rôles.
 
 ## 🚀 Lancement du projet
 
-[cite_start]**Prérequis :** Python 3.11+ et le gestionnaire de paquets `uv` installés [cite: 81-82].
+**Prérequis :** Python 3.11+ et le gestionnaire de paquets `uv` installés.
 
 ### 1. Configuration
 Vérifiez que le fichier `dev.env` est bien présent à la racine du projet :
